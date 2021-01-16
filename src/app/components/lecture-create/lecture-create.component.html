@@ -1,0 +1,272 @@
+<app-breadcrumb [breadcrumbList]="breadcrumbData"  ></app-breadcrumb>
+<br>
+<div class="w3-padding">
+  <div class="row">
+    <div class="col-md-3 w3-padding">
+
+      <!-- Profile Image -->
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive img-circle" src="/assets/img/application.gif" alt="User profile picture">
+
+          <h3 class="profile-username text-center">{{ course.name }}</h3>
+
+
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>{{ "student register" | trans }}</b> <a class="pull-left">{{ course.register_student_count }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>{{ "departments" | trans }}</b> <a class="pull-left">{{ course.department_count }}</a>
+            </li>
+          </ul>
+
+          <button mat-raised-button class="btn w3-indigo app-button btn-block" [disabled]="isSubmitted" (click)="send()" >
+            <b class="w3-right" >{{"submit" | trans}}</b>
+            <b class="w3-left fa fa-send-o" style="padding-top: 9px" *ngIf="!isSubmitted" ></b>
+            <b class="w3-left fa fa-spin fa-spinner" style="padding-top: 9px" *ngIf="isSubmitted" ></b>
+          </button>
+
+          <button mat-raised-button class="btn app-button btn-block light-gray" [disabled]="isSubmitted" [routerLink]="['/lectures', course.id]"   >
+            <b class="w3-right" >{{"back" | trans}}</b>
+            <b class="w3-left fa fa-reply" style="padding-top: 9px"   ></b>
+          </button>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+      <!-- About Me Box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{ "course info" | trans }}</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <strong><i class="fa fa-book margin-r-5"></i> {{"description" | trans}}</strong>
+
+          <p class="text-muted">
+            {{ course.description }}
+          </p>
+
+          <hr>
+
+          <strong><i class="fa fa-clock-o margin-r-5"></i> {{"credit_hour" | trans}}</strong>
+
+          <p class="text-muted">{{ course.credit_hour }}</p>
+
+          <hr>
+
+          <strong><i class="fa fa-level-up margin-r-5"></i> {{"level" | trans}}</strong>
+
+          <p class="text-muted">{{ course.level? course.level.name : '' }}</p>
+
+          <hr>
+
+          <strong><i class="fa fa-graduation-cap margin-r-5"></i> {{"large_degree" | trans}}</strong>
+
+          <p class="text-muted">{{ course.large_degree }}</p>
+
+          <hr>
+
+          <strong><i class="fa fa-check-square margin-r-5"></i> {{"active" | trans}}</strong>
+
+          <p class="text-muted">{{ course.active }}</p>
+
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9 w3-padding">
+      <div class="material-shadow w3-padding w3-white w3-display-container">
+
+        <ul class="timeline timeline-inverse">
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                  {{ "lecture name" | trans }}
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-edit theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "write lecture name" | trans }} </h3>
+
+              <div class="timeline-body">
+                <input type="text" class="app-form" [(ngModel)]="resource.name" >
+              </div>
+            </div>
+          </li>
+          <!-- END timeline item -->
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                  -- {{ "files" | trans }} --
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-file-o theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "upload file 1" | trans }} </h3>
+
+              <div class="timeline-body">
+                <input type="file" class="app-form" (change)="loadFile($event, 'file1')" >
+                <br>
+                <a target="_blank" *ngIf="resource.file1" [href]="resource.file1_url" >
+                  {{ resource.file1.name }}
+                </a>
+              </div>
+              <h3 class="timeline-header"> {{ "upload file 2" | trans }} </h3>
+
+              <div class="timeline-body">
+                <input type="file" class="app-form" (change)="loadFile($event, 'file2')" >
+              </div>
+              <br>
+              <a target="_blank" *ngIf="resource.file2" [href]="resource.file2_url" >
+                {{ resource.file2.name }}
+              </a>
+            </div>
+          </li>
+          <!-- END timeline item -->
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                  -- {{ "video" | trans }} --
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-video-camera theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "upload your video" | trans }} </h3>
+
+              <div class="timeline-body">
+                <input type="file" class="app-form" (change)="loadFile($event, 'video')" >
+                <br>
+                <div class="video-container" *ngIf="resource.video_url" >
+                  <video [src]="resource.video_url" autoplay  controls style="width: 100%;" ></video>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- END timeline item -->
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                   {{ "youtube_url" | trans }}
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-youtube-play theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "past youtube url" | trans }} </h3>
+
+              <div class="timeline-body">
+                <input type="url" class="app-form" (change)="getYouTubeEmbededUrl()" [(ngModel)]="resource.youtube_url" >
+                <br>
+                <iframe
+                *ngIf="resource.youtube_url"
+                style="width: 100%"
+                height="315"
+                [src]="resource.youtube_embeded_url"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            </div>
+          </li>
+          <!-- END timeline item -->
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                   {{ "date" | trans }}
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-calendar theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "date of lecture" | trans }} </h3>
+
+              <div class="timeline-body">
+                <input type="date" class="app-form" [(ngModel)]="resource.date" >
+              </div>
+            </div>
+          </li>
+          <!-- END timeline item -->
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                   {{ "active" | trans }}
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-check-square theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "activate the lecture" | trans }} </h3>
+
+              <div class="timeline-body">
+                <mat-slide-toggle  [(ngModel)]="resource.active" ></mat-slide-toggle>
+              </div>
+            </div>
+          </li>
+          <!-- END timeline item -->
+          <!-- timeline time label -->
+          <li class="time-label hidden">
+                <span class="bg-red">
+                   {{ "description" | trans }}
+                </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+            <i class="fa fa-text-width theme-semi-dark w3-text-white"></i>
+
+            <div class="timeline-item">
+
+              <h3 class="timeline-header"> {{ "write description of lecture" | trans }} </h3>
+
+              <div class="timeline-body">
+                <textarea class="app-form" id=""  [(ngModel)]="resource.description" ></textarea>
+              </div>
+            </div>
+          </li>
+          <!-- END timeline item -->
+
+
+
+        </ul>
+
+      </div>
+      <!-- /.nav-tabs-custom -->
+    </div>
+    <!-- /.col -->
+  </div>
+
+</div>
+
+
+

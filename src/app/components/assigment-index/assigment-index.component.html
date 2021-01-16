@@ -1,0 +1,221 @@
+<app-breadcrumb [breadcrumbList]="breadcrumbData"></app-breadcrumb>
+
+<div class="w3-display-bottomleft w3-padding" style="position: fixed;z-index: 9999" >
+  <button mat-fab color="primary" (click)="create()" >{{ "new" | trans }}</button>
+</div>
+
+<div class="w3-light-gray w3-block w3-padding filter-section w3-padding">
+  <div class="row">
+
+    <div class="col-lg-2 col-md-2 col-sm-6 w3-padding">
+      <b>{{ "search with name or description" | trans }}</b>
+      <input type="text" class="app-select material-shadow w3-white"
+      style="border-radius: 5em;" [(ngModel)]="filter.search" >
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6 w3-padding">
+      <b>{{ "select course" | trans }}</b>
+      <select class="app-select material-shadow w3-white"
+      (change)="filter.lecture_id=null"
+      style="border-radius: 5em;" [(ngModel)]="filter.course_id"  >
+        <option value="">{{ "select course" | trans }}</option>
+        <ng-container  *ngFor="let item of courses">
+          <option  value="{{ item.id }}">{{ item.name }}</option>
+        </ng-container>
+      </select>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6 w3-padding">
+      <b>{{ "select lecture" | trans }}</b>
+      <select class="app-select material-shadow w3-white" style="border-radius: 5em;" [(ngModel)]="filter.lecture_id"  >
+        <option value="">{{ "select lecture" | trans }}</option>
+        <ng-container  *ngFor="let item of lectures">
+          <option *ngIf="item.course_id == filter.course_id" value="{{ item.id }}">{{ item.name }}</option>
+        </ng-container>
+      </select>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6 w3-padding">
+      <br>
+      <button mat-raised-button [disabled]="reload" class="w3-block w3-dark-gray w3-row app-button" (click)="get()" >
+        <b class="w3-right" >{{ "reload" | trans }}</b>
+        <i class="fa fa-refresh w3-left" style="padding-top: 10px;" *ngIf="!reload" ></i>
+        <i class="fa fa-refresh fa-spin w3-left" style="padding-top: 10px;" *ngIf="reload" ></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="w3-row">
+
+
+  <div class="col-lg-12" style="overflow: auto;">
+    <div class="row w3-padding">
+
+      <div class="col-lg-12 col-md-12 col-sm-12">
+
+
+
+      </div>
+
+
+      <div class="col-lg-12 w3-padding text-center w3-xlarge theme-text-dark" *ngIf="reload">
+        <span class="fa fa-spin fa-spinner"></span>
+      </div>
+
+      <div class="col-lg-12 w3-padding text-center w3-xlarge theme-text-dark" *ngIf="!reload && courses.length <= 0">
+        <span class="">{{ "there is no data" | trans }}</span>
+      </div>
+
+      <ng-container *ngFor="let item of assignments index as i">
+
+        <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="!reload">
+
+          <div class="post material-shadow w3-white w3-round w3-display-container w3-block w3-padding">
+            <div class="user-block w3-text-gray">
+              <app-app-avatar
+              [url]="item.doctor? item.doctor.url : null"
+              [icon]="'fa fa-user-circle'" [class]="'w3-round w3-col text-center'"
+                [width]="'50px'" [height]="'50px'"></app-app-avatar>
+              <span class="username" style="padding: 5px!important">
+                <a href="#">{{ item.doctor? item.doctor.name : '' }}</a>
+              </span>
+              <span class="description" style="padding: 5px!important">{{ item.created_at | date }}</span>
+            </div>
+            <div class="w3-large" *ngIf="item.name">
+              <b>{{ item.name }}</b>
+            </div>
+            <!-- /.user-block -->
+            <p style="width: 60%" *ngIf="item.description" >
+              {{ item.description }}
+            </p>
+            <a mat-raised-button class="w3-round light-gray"
+              [href]="trustUrl(item.file_url)"
+              target="_blank"
+              style="width: 100px;border-radius: 5em;padding: 0px!important;margin: 3px">
+              <i class="fa fa-cloud-download w3-large"></i>
+            </a>
+            <a mat-raised-button class="w3-round light-gray"
+              [href]="trustUrl(item.file_url)"
+              target="_blank"
+              style="width: 100px;border-radius: 5em;padding: 0px!important;margin: 3px">
+              <i class="fa fa-desktop w3-large"></i>
+            </a>
+            <br>
+            <br>
+            <ul class="list-inline">
+              <li>
+                <b>{{ item.date_from | date }}</b> ------------- <b>{{ item.date_to | date }}</b>
+              </li>
+              <li><a class="link-black text-sm"><i class="fa fa-cloud-upload margin-r-5"></i> uploads ({{ item.uploads }})
+                </a></li>
+            </ul>
+
+            <div class="w3-display-topleft w3-padding">
+              <div class="w3-padding theme-semi-dark w3-text-white w3-round text-center" style="margin-bottom: 5px;border-radius: 5em;">{{ item.course? item.course.name : '' }}</div>
+              <div class="w3-padding theme-semi-dark w3-text-white w3-round text-center" style="border-radius: 5em;">{{ item.lecture? item.lecture.name : '' }}</div>
+
+            </div>
+
+            <div class="w3-display-bottomleft w3-padding">
+              <button mat-mini-fab color="primary" (click)="edit(item)" >
+                <i class="fa fa-edit" ></i>
+              </button>
+              <button mat-mini-fab color="warn" style="margin: 4px" (click)="archive(item)" >
+                <i class="fa fa-trash" ></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+
+      </ng-container>
+
+
+    </div>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  </div>
+
+
+</div>
+
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="formModal" >
+  <div class="modal-dialog modal-lg" role="document">
+
+    <div class="post material-shadow light-gray w3-round w3-display-container w3-block w3-padding">
+      <div class="user-block w3-text-gray">
+        <app-app-avatar [url]="resource.url" [icon]="'fa fa-user-circle'" [class]="'w3-round w3-col text-center'"
+          [width]="'50px'" [height]="'50px'"></app-app-avatar>
+        <span class="username" style="padding: 5px!important">
+          <a href="#">{{ auth.name }}</a>
+        </span>
+      </div>
+      <br>
+      <br>
+      <div class="w3-"  >
+        <b>{{ "assigment name" | trans }}</b>
+        <input type="text" class="app-form" [(ngModel)]="resource.name">
+      </div>
+      <br>
+      <div class="w3-"  >
+        <b>{{ "assigment degree" | trans }}</b>
+        <input type="number" class="app-form" [(ngModel)]="resource.degree">
+      </div>
+      <br>
+      <!-- /.user-block -->
+      <p >
+        <b>{{ "assigment description" | trans }}</b>
+        <textarea class="app-form" [(ngModel)]="resource.description" cols="30"></textarea>
+      </p>
+      <button mat-raised-button class="w3-round light-gray"
+        (click)="$('.assigment-input-file').click()"
+        style="width: 100px;border-radius: 5em;padding: 0px!important">
+        <i class="fa fa-cloud-upload w3-large"></i> {{ "upload file" }}
+      </button>
+      <input type="file" class="hidden assigment-input-file" (change)="loadFile($event, 'file')" >
+      <br>
+      <b *ngIf="resource.file" >{{ resource.file.name }}</b>
+      <br>
+      <br>
+      <ul class="list-inline">
+        <li>
+          <b><input type="date" class="w3-round" [(ngModel)]="resource.date_from"></b>
+          -------------
+          <b><input type="date" class="w3-round" [(ngModel)]="resource.date_to"></b>
+        </li>
+      </ul>
+      <br>
+      <button mat-raised-button
+      [disabled]="isSubmitted"
+      (click)="send()"
+      color="primary" style="border-radius: 5em;">
+        <i *ngIf="!isSubmitted" >{{ "submit" }}</i>
+        <i class="fa fa-spin fa-spinner" *ngIf="isSubmitted" ></i>
+      </button>
+
+      <div class="w3-display-topleft w3-padding">
+        <b>{{ "select course" | trans }}</b>
+        <select class="app-select material-shadow w3-white"
+        (change)="filter.lecture_id=null"
+        style="border-radius: 5em;" [(ngModel)]="resource.course_id"  >
+          <option value="">{{ "select course" | trans }}</option>
+          <ng-container  *ngFor="let item of courses">
+            <option  value="{{ item.id }}">{{ item.name }}</option>
+          </ng-container>
+        </select>
+        <b>{{ "select lecture" | trans }}</b>
+        <select class="app-select material-shadow w3-white" style="border-radius: 5em;" [(ngModel)]="resource.lecture_id"  >
+          <option value="">{{ "select lecture" | trans }}</option>
+          <ng-container  *ngFor="let item of lectures">
+            <option *ngIf="item.course_id == resource.course_id" value="{{ item.id }}">{{ item.name }}</option>
+          </ng-container>
+        </select>
+      </div>
+    </div>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

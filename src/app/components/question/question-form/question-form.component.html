@@ -1,0 +1,105 @@
+<div class="modal fade" id="{{ editable? 'questionEditModal' : 'questionAddModal' }}" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content light-gray">
+      <div class="modal-header w3-border-0" >
+        <button type="button" class="close w3-text-red" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center">{{ title | trans }}</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table" >
+          <tr class="" >
+            <td  colspan="2" class="text-center w3-padding" >
+              <img [src]="resource.image_url" class="w3-block" *ngIf="resource.image_url" >
+              <button mat-raised-button style="border-radius: 5em;" (click)="$(editable? '.image-input' : '.edit-image-input').click()" >
+                <i class="fa fa-cloud-upload " ></i> {{ "upload image" | trans }}
+              </button>
+              <br>
+              <input type="file" class="app-form hidden {{ editable? 'image-input' : 'edit-image-input' }}" (change)="loadFile($event, 'image')" [(ngModel)]="resource.image" accept="image/*" >
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "text" | trans }} *</th>
+            <td>
+              <input type="text" class="app-form" [(ngModel)]="resource.text" >
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "course" | trans }} *</th>
+            <td>
+              <select class="app-form" [(ngModel)]="resource.course_id">
+                <option *ngFor="let item of courses" value="{{ item.id }}" >{{ item.name }}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "question_category" | trans }} *</th>
+            <td>
+              <select class="app-form" [(ngModel)]="resource.question_category_id">
+                <option *ngFor="let item of categories" value="{{ item.id }}" >{{ item.name }}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "question_type" | trans }} *</th>
+            <td>
+              <select class="app-form" [(ngModel)]="resource.question_type_id" (change)="initQuestionChoices()" >
+                <option *ngFor="let type of types" value="{{ type.id }}" >{{ type.name | trans }}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "question_level" | trans }} *</th>
+            <td>
+              <select class="app-form" [(ngModel)]="resource.question_level_id">
+                <option *ngFor="let item of levels" value="{{ item.id }}" >{{ item.name | trans }}</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "notes" | trans }}</th>
+            <td>
+              <textarea class="app-form" [(ngModel)]="resource.notes" ></textarea>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ "active" | trans }}</th>
+            <td>
+              <mat-slide-toggle
+              [(ngModel)]="resource.active"
+              [checked]="resource.active">
+              </mat-slide-toggle>
+            </td>
+          </tr>
+        </table>
+        <br>
+        <table class="table table-bordered" >
+          <tr class="text-right" >
+              <th class="text-right" >{{ 'text' | trans }}</th>
+              <th class="text-right" >
+                  {{  'is answer' | trans }}
+              </th>
+          </tr>
+          <tr *ngFor="let item of resource.choices index as i" >
+            <th>
+              <input type="text" class="app-form"  [(ngModel)]="item.text" [readOnly]="item.readonly || resource.question_type_id == 1" >
+            </th>
+            <th>
+              <mat-slide-toggle
+              #choiceToggle
+              [disabled]="resource.question_type_id == 3"
+              (change)="toggleIsAnswer(item, choiceToggle.checked, i)"
+              [(ngModel)]="item.is_answer" ></mat-slide-toggle>
+            </th>
+          </tr>
+
+      </table>
+      </div>
+      <div class="modal-footer w3-center">
+        <button mat-raised-button class="w3-indigo" [disabled]="isSubmitted" (click)="send()" >
+          <span *ngIf="!isSubmitted" >{{ "submit" | trans }}</span>
+          <span *ngIf="isSubmitted" class="fa fa-spin fa-spinner" ></span>
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
