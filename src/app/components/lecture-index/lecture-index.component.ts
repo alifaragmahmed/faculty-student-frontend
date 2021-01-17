@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, RouterLinkActive } from '@angular/router';
+import { Helper } from 'src/app/shared/helper';
 import { GlobalService } from 'src/app/shared/services/global.service';
 
 @Component({
@@ -8,6 +9,9 @@ import { GlobalService } from 'src/app/shared/services/global.service';
   styleUrls: ['./lecture-index.component.scss']
 })
 export class LectureIndexComponent implements OnInit {
+
+
+  helper: any = Helper;
 
 
   resource: any = {};
@@ -74,7 +78,7 @@ export class LectureIndexComponent implements OnInit {
   }
 
   loadCourse(id) {
-    this.globalService.get('doctor/courses/'+id).subscribe((res) => {
+    this.globalService.get('student/courses/'+id).subscribe((res) => {
       this.resource = res;
       this.lectures = this.resource.lectures;
       this.initBreadcrumbData();

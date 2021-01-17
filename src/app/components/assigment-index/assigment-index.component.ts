@@ -174,7 +174,7 @@ export class AssigmentIndexComponent implements OnInit {
     let params = (data)? data: this.filter;
     this.reload = true;
     this.archiveLoad = false;
-    this.globalService.get("doctor/assignments", params).subscribe((res) => {
+    this.globalService.get("student/assignments", params).subscribe((res) => {
       this.response = res;
       this.assignments = this.response.data;
       this.reload = false;
@@ -187,8 +187,8 @@ export class AssigmentIndexComponent implements OnInit {
    * load all assignment data
    *
    */
-  loadDoctorCourses(data=null) {
-    this.globalService.get("doctor/courses").subscribe((res: any) => {
+  loadstudentCourses(data=null) {
+    this.globalService.get("student/courses").subscribe((res: any) => {
       this.courses = res.data;
     });
   }
@@ -197,8 +197,8 @@ export class AssigmentIndexComponent implements OnInit {
    * load all assignment data
    *
    */
-  loadDoctorLectures(data=null) {
-    this.globalService.get("doctor/lectures").subscribe((res) => {
+  loadstudentLectures(data=null) {
+    this.globalService.get("student/lectures").subscribe((res) => {
       this.lectures = res;
     });
   }
@@ -289,44 +289,19 @@ export class AssigmentIndexComponent implements OnInit {
     this.document.nicescroll('.data-container', {height: height});
   }
 
-  loadFile(e, key) {
-    Helper.loadImage(e, key, this.resource);
+  loadFile(e, item,  key) {
+    Helper.loadImage(e, key, item);
+
   }
 
-  validate() {
+  validate(item) {
     let valid = true;
-    if (!this.resource.course_id) {
-      valid = false;
-      Message.error(Helper.trans("choice course name"));
-    }
-    if (!this.resource.lecture_id) {
-      valid = false;
-      Message.error(Helper.trans("choice lecture name"));
-    }
-    if (!this.resource.name) {
-      valid = false;
-      Message.error(Helper.trans("write assigment name"));
-    }
-    if (!this.resource.degree) {
-      valid = false;
-      Message.error(Helper.trans("write assigment degree"));
-    }
-    if (!this.resource.file && !this.resource.id) {
+
+    if (!item.student_file) {
       valid = false;
       Message.error(Helper.trans("upload assigment file"));
     }
-    if (!this.resource.date_from || !this.resource.date_to) {
-      valid = false;
-      Message.error(Helper.trans("choice assigment dates"));
-    }
-    if (this.resource.date_from && this.resource.date_to) {
-      let time1 = new Date(this.resource.date_from).getTime();
-      let time2 = new Date(this.resource.date_to).getTime();
-      if (time1 >= time2) {
-        valid = false;
-        Message.error(Helper.trans("date to must be larger than date from"));
-      }
-    }
+
     return valid;
   }
 
@@ -334,79 +309,37 @@ export class AssigmentIndexComponent implements OnInit {
    * send assignment object to api
    *
    */
-  send() {
-    if (this.resource.id)
-      this.update();
-    else
-      this.store();
-  }
-
-  /**
-   * store new assignment
-   *
-   */
-  store() {
-    console.log(this.resource);
-    if (!this.validate()) {
-      return;
-    }
-    this.isSubmitted = true;
-    this.globalService.store("doctor/assignments/store", Helper.toFormData(this.resource)).subscribe((res: any) => {
-      if (res.status == 1) {
-        Message.success(res.message);
-        this.resource = {};
-        this.get();
-      } else {
-        Message.error(res.message);
-      }
-      this.isSubmitted = false;
-    });
+  send(item) {
+     this.update(item);
   }
 
   /**
    * update assignment
    *
    */
-  update() {
+  update(item) {
     console.log(this.resource);
-    if (!this.validate()) {
+    if (!this.validate(item)) {
       return;
     }
-    this.isSubmitted = true;
-    this.globalService.store("doctor/assignments/update/"+this.resource.id, Helper.toFormData(this.resource)).subscribe((res: any) => {
+    item.isSubmitted = true;
+    item.assignment_id = item.id;
+    this.globalService.store("student/student-assignments/update", Helper.toFormData(item)).subscribe((res: any) => {
       if (res.status == 1) {
         Message.success(res.message);
         this.get();
       } else {
         Message.error(res.message);
       }
-      this.isSubmitted = false;
-    });
-  }
-
-  /**
-   * show export questions from excel file
-   *
-   */
-  archive(item) {
-    let _this = this;
-    Message.confirm(Helper.trans("are you sure"), ()=>{
-      _this.globalService.destroy("doctor/assignments/delete", item.id).subscribe((r: any)=>{
-        if (r.status == 1) {
-          Message.success(r.message);
-          this.get();
-        }
-        else
-          Message.error(r.message);
-      });
+      item.isSubmitted = false;
     });
   }
 
   ngOnInit() {
     this.initBreadcrumbData();
     this.loadSettings();
-    this.loadDoctorCourses();
-    this.loadDoctorLectures();
+    this.loadstudentCourses();
+    this.loadstudentLectures();
     let _this = this;
     //
     setTimeout(()=>{

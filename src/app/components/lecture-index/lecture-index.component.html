@@ -21,10 +21,6 @@
             </li>
           </ul>
 
-          <button mat-raised-button class="btn w3-indigo app-button btn-block" [routerLink]="'/create-lecture'" [queryParams]="{course_id: resource.id}"   >
-            <b class="w3-right" >{{"add new lecture" | trans}}</b>
-            <b class="w3-left fa fa-plus-circle" style="padding-top: 9px" ></b>
-          </button>
 
           <button mat-raised-button class="btn w3-dark-gray app-button btn-block"  routerLink="/courses" >
             <b class="w3-right" >{{"back" | trans}}</b>
@@ -88,13 +84,10 @@
             <br>
             <img src="/assets/img/lecture.png" class="w3-block" alt="">
             <br>
-            <b>{{ item.name }}</b>
+            <b class="w3-tiny" >{{ helper.getOverText(item.name, 16) }}</b>
 
-            <div class="w3-padding w3-display-topleft">
-              <button mat-mini-fab color="warn"  [routerLink]="'/create-lecture'" [queryParams]="{course_id: resource.id, lecture_id: item.id}" ><i class="fa fa-edit"></i></button>
-             </div>
 
-            <div class="w3-padding w3-display-topleft hidden">
+            <div class="w3-padding w3-display-topleft" *ngIf="item.seen" >
               <span class="fa fa-check-square w3-text-green w3-large" ></span>
             </div>
           </div>

@@ -107,7 +107,7 @@ export class LectureShowComponent implements OnInit {
   }
 
   loadCourse(id) {
-    this.globalService.get('doctor/courses/'+id).subscribe((res) => {
+    this.globalService.get('student/courses/'+id).subscribe((res) => {
       this.course = res;
       this.lectures = this.course.lectures;
       this.initBreadcrumbData();
@@ -115,7 +115,7 @@ export class LectureShowComponent implements OnInit {
   }
 
   loadLecture(id) {
-    this.globalService.get('doctor/lectures/'+id).subscribe((res) => {
+    this.globalService.get('student/lectures/'+id).subscribe((res) => {
       this.resource = res;
       //
       if (this.resource.file1)
@@ -212,7 +212,7 @@ export class LectureShowComponent implements OnInit {
       return;
     }
     this.isSubmitted = true;
-    this.globalService.store("doctor/lectures/store", Helper.toFormData(this.resource)).subscribe((res: any) => {
+    this.globalService.store("student/lectures/store", Helper.toFormData(this.resource)).subscribe((res: any) => {
       if (res.status == 1) {
         Message.success(res.message);
         this.reset();
@@ -233,7 +233,7 @@ export class LectureShowComponent implements OnInit {
       return;
     }
     this.isSubmitted = true;
-    this.globalService.store("doctor/lectures/update/"+this.resource.id, Helper.toFormData(this.resource)).subscribe((res: any) => {
+    this.globalService.store("student/lectures/update/"+this.resource.id, Helper.toFormData(this.resource)).subscribe((res: any) => {
       if (res.status == 1) {
         Message.success(res.message);
       } else {
@@ -250,7 +250,7 @@ export class LectureShowComponent implements OnInit {
   remove() {
     let _this = this;
     Message.confirm(Helper.trans("are you sure"), ()=>{
-      _this.globalService.destroy("doctor/lectures/delete", this.resource.id).subscribe((r: any)=>{
+      _this.globalService.destroy("student/lectures/delete", this.resource.id).subscribe((r: any)=>{
         if (r.status == 1) {
           Helper.refreshComponent(this.route, '/lectures/'+this.course.id);
         }

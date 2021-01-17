@@ -8,7 +8,6 @@ import { MainPageComponent } from './core/components/main-page/main-page.compone
 import { CourseIndexComponent } from './components/course/course-index/course-index.component';
 import { LectureIndexComponent } from './components/lecture-index/lecture-index.component';
 import { LectureShowComponent } from './components/lecture-show/lecture-show.component';
-import { LectureCreateComponent } from './components/lecture-create/lecture-create.component';
 import { AssigmentIndexComponent } from './components/assigment-index/assigment-index.component';
 import { QuestionIndexComponent } from './components/question/question-index/question-index.component';
 import { QuestionCategoryIndexComponent } from './components/question-category/question-category-index/question-category-index.component';
@@ -35,10 +34,6 @@ const routes: Routes = [
       {
         path: 'show-lecture',
         component: LectureShowComponent
-      },
-      {
-        path: 'create-lecture',
-        component: LectureCreateComponent
       },
       {
         path: 'assigments',

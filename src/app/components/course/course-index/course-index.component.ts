@@ -148,7 +148,7 @@ export class CourseIndexComponent implements OnInit {
     let params = (data)? data: this.filter;
     this.reload = true;
     this.archiveLoad = false;
-    this.globalService.get("doctor/courses", params).subscribe((res) => {
+    this.globalService.get("student/courses", params).subscribe((res) => {
       this.response = res;
       this.courses = this.response.data;
       this.reload = false;

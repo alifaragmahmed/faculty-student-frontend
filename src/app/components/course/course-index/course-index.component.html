@@ -49,7 +49,7 @@
               class="material-shadow w3-white w3-round w3-display-container w3-block text-center"
               [routerLink]="'/lectures/' + item.id">
                 <app-app-avatar
-                  [url]="item.url"
+                  [url]="item.photo_url"
                   [icon]="'fa fa-graduation-cap'"
                   [class]="'w3-round w3-xlarge'"
                   [width]="'100%'"
@@ -59,7 +59,7 @@
                   <br>
                 </div>
                 <div *ngIf="item.deleted_at" >
-                  <button class="btn fa fa-reply w3-green material-shadow" style="padding: 5px!important;margin: 5px" (click)="restore(item)" ></button>
+                  <button class="btn fa fa-reply w3-green material-shadow" style="padding: 5px!important;margin: 5px"  ></button>
                 </div>
                 <div class="w3-display-topleft w3-padding" *ngIf="!item.deleted_at" >
                   <span class="label label-success" *ngIf="item.active" >{{ "activited" | trans }}</span>

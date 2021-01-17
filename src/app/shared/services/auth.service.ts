@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   login(userLogin: any)  {
-    return this.http.post('doctor/login', userLogin);
+    return this.http.post('student/login', userLogin);
   }
 
   confirmEmail(confirmEmail: { code: string }) {

@@ -26,9 +26,7 @@ import { RoleService } from './user/services/role.service';
 import { MatSliderModule, MatSlideToggleModule } from '@angular/material';
 import { CourseIndexComponent } from './components/course/course-index/course-index.component';
 import { LectureIndexComponent } from './components/lecture-index/lecture-index.component';
-import { LectureFormComponent } from './components/lecture-form/lecture-form.component';
 import { LectureShowComponent } from './components/lecture-show/lecture-show.component';
-import { LectureCreateComponent } from './components/lecture-create/lecture-create.component';
 import { AssigmentIndexComponent } from './components/assigment-index/assigment-index.component';
 import { QuestionIndexComponent } from './components/question/question-index/question-index.component';
 import { QuestionFormComponent } from './components/question/question-form/question-form.component';
@@ -50,9 +48,7 @@ import { AssignStudentToExamComponent } from './components/exam/assign-student-t
     UserProfileComponent,
     CourseIndexComponent,
     LectureIndexComponent,
-    LectureFormComponent,
     LectureShowComponent,
-    LectureCreateComponent,
     AssigmentIndexComponent,
     QuestionIndexComponent,
     QuestionFormComponent,
