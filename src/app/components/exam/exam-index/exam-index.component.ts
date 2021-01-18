@@ -62,23 +62,6 @@ export class ExamIndexComponent implements OnInit {
   public courses: any = [];
 
   /**
-   * fields of exam table
-   *
-   */
-  public fields: any = [
-    'name',
-    'level_id',
-    'faculty_id',
-    'code',
-    'credit_hour',
-    'description',
-    'final_degree',
-    'active',
-    'created_at',
-    'updated_at'
-  ];
-
-  /**
    * url of export api
    *
    */
@@ -111,7 +94,7 @@ export class ExamIndexComponent implements OnInit {
   get(data=null) {
     let params = (data)? data: this.filter;
     this.reload = true;
-    this.globalService.get("doctor/exams", params).subscribe((res) => {
+    this.globalService.get("student/exam-room", params).subscribe((res) => {
       this.response = res;
       this.exams = this.response.data;
       this.reload = false;
@@ -120,47 +103,15 @@ export class ExamIndexComponent implements OnInit {
     });
   }
 
-  /**
-   * show add exam modal
-   *
-   */
-  create() {
-    this.$('#examAddModal').modal('show');
-  }
-
-  /**
-   * show add exam modal
-   *
-   */
-  createMore() {
-    this.$('.create-more').slideToggle(500);
-  }
-
-  /**
-   * show add exam modal
-   *
-   */
-  edit(item) {
-    this.resource = item;
-    this.resource.image = null;
-    this.$('#examEditModal').modal('show');
-  }
 
   /**
    * show export exams from excel file
    *
    */
-  archive(item, index) {
+  start(item) {
     let _this = this;
     Message.confirm(Helper.trans("are you sure"), ()=>{
-      _this.globalService.destroy("doctor/exams/delete", item.id).subscribe((r: any)=>{
-        if (r.status == 1) {
-          Message.success(r.message);
-          this.get();
-        }
-        else
-          Message.error(r.message);
-      });
+
     });
   }
 
@@ -175,7 +126,7 @@ export class ExamIndexComponent implements OnInit {
   loadSettings() {
     this.get();
     //
-    this.globalService.get("doctor/courses").subscribe((r: any) => {
+    this.globalService.get("student/courses").subscribe((r: any) => {
       this.courses = r.data;
     });
   }
@@ -188,10 +139,6 @@ export class ExamIndexComponent implements OnInit {
     console.log(this.response);
   }
 
-  setDataContainerStyle() {
-    let height = (window.innerHeight - 250) + "px";
-    this.document.nicescroll('.data-container', {height: height});
-  }
 
   trustUrl(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -202,8 +149,5 @@ export class ExamIndexComponent implements OnInit {
     this.loadSettings();
     let _this = this;
     //
-    setTimeout(()=>{
-      _this.setDataContainerStyle();
-    }, 500);
   }
 }

@@ -7,11 +7,11 @@ import { GlobalService } from 'src/app/shared/services/global.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-correct-blan-answer',
-  templateUrl: './correct-blan-answer.component.html',
-  styleUrls: ['./correct-blan-answer.component.scss']
+  selector: 'app-my-exam-index',
+  templateUrl: './my-exam-index.component.html',
+  styleUrls: ['./my-exam-index.component.scss']
 })
-export class CorrectBlanAnswerComponent implements OnInit {
+export class MyExamIndexComponent implements OnInit {
 
   /**
    * init jquery
@@ -35,9 +35,7 @@ export class CorrectBlanAnswerComponent implements OnInit {
    * filter inputs
    *
    */
-  public response: any = {
-    data: []
-  };
+  public response: any = {};
 
   /**
    * filter inputs
@@ -62,7 +60,6 @@ export class CorrectBlanAnswerComponent implements OnInit {
    *
    */
   public courses: any = [];
-
 
   /**
    * url of export api
@@ -97,7 +94,7 @@ export class CorrectBlanAnswerComponent implements OnInit {
   get(data=null) {
     let params = (data)? data: this.filter;
     this.reload = true;
-    this.globalService.get("doctor/exams", params).subscribe((res) => {
+    this.globalService.get("student/exams", params).subscribe((res) => {
       this.response = res;
       this.exams = this.response.data;
       this.reload = false;
@@ -106,6 +103,65 @@ export class CorrectBlanAnswerComponent implements OnInit {
     });
   }
 
+  /**
+   * show add exam modal
+   *
+   */
+  create() {
+    this.$('#examAddModal').modal('show');
+  }
+
+  /**
+   * show add exam modal
+   *
+   */
+  createMore() {
+    this.$('.create-more').slideToggle(500);
+  }
+
+  /**
+   * show add exam modal
+   *
+   */
+  edit(item) {
+    this.resource = item;
+    this.resource.image = null;
+    this.$('#examEditModal').modal('show');
+  }
+
+  /**
+   * show export exams from excel file
+   *
+   */
+  archive(item, index) {
+    let _this = this;
+    Message.confirm(Helper.trans("are you sure"), ()=>{
+      _this.globalService.destroy("student/exams/delete", item.id).subscribe((r: any)=>{
+        if (r.status == 1) {
+          Message.success(r.message);
+          this.get();
+        }
+        else
+          Message.error(r.message);
+      });
+    });
+  }
+
+
+  /**
+   * load all filter data
+   * load levels
+   * load types
+   * load departments
+   * load faculties
+   */
+  loadSettings() {
+    this.get();
+    //
+    this.globalService.get("student/courses").subscribe((r: any) => {
+      this.courses = r.data;
+    });
+  }
 
   /**
    * pre panination
@@ -115,9 +171,22 @@ export class CorrectBlanAnswerComponent implements OnInit {
     console.log(this.response);
   }
 
+  setDataContainerStyle() {
+    let height = (window.innerHeight - 250) + "px";
+    this.document.nicescroll('.data-container', {height: height});
+  }
+
+  trustUrl(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
   ngOnInit() {
     this.initBreadcrumbData();
+    this.loadSettings();
     let _this = this;
     //
+    setTimeout(()=>{
+      _this.setDataContainerStyle();
+    }, 500);
   }
 }

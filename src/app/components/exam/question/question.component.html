@@ -1,0 +1,26 @@
+<div class="w3-display-container w-padding">
+  <ul>
+    <li>
+      <b class="w3-large" >{{ resource.question_category? resource.question_category.notes : '' }}</b>
+      <br>
+      <div class="w3-padding">
+        <b>{{ number }}) {{ resource.text }}</b>
+        <ng-container *ngIf="resource.photo" >
+          <br>
+          <img [src]="resource.photo_url" width="80%" >
+        </ng-container>
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-12 text-right" *ngFor="let choice of resource.choices index as count">
+            <input type="radio" class="w3-check" [name]="'question-name-'+resource.id" #radioChoice (change)="selectAnswer(choice, radioChoice.checked)" >
+            {{ count + 1 }})
+            {{ choice.text }}
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="w3-display-topleft w3-padding" data-toggle="tooltip" data-placement="top" title="{{ 'is_breadpoint' | trans }}" >
+    <mat-slide-toggle [(ngModel)]="item.is_breadpoint"></mat-slide-toggle>
+  </div>
+
+</div>

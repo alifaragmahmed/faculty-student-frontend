@@ -34,10 +34,11 @@ import { QuestionCreateMoreComponent } from './components/question/question-crea
 import { QuestionCategoryIndexComponent } from './components/question-category/question-category-index/question-category-index.component';
 import { QuestionCategoryFormComponent } from './components/question-category/question-category-form/question-category-form.component';
 import { AssigmentReportComponent } from './components/report/assigment-report/assigment-report.component';
-import { ExamFormComponent } from './components/exam/exam-form/exam-form.component';
 import { ExamIndexComponent } from './components/exam/exam-index/exam-index.component';
-import { CorrectBlanAnswerComponent } from './components/exam/correct-blan-answer/correct-blan-answer.component';
-import { AssignStudentToExamComponent } from './components/exam/assign-student-to-exam/assign-student-to-exam.component';
+import { MyExamIndexComponent } from './components/exam/my-exam-index/my-exam-index.component';
+import { ExamRoomComponent } from './components/exam/exam-room/exam-room.component';
+import { QuestionComponent } from './components/exam/question/question.component';
+
 
 @NgModule({
   declarations: [
@@ -56,10 +57,10 @@ import { AssignStudentToExamComponent } from './components/exam/assign-student-t
     QuestionCategoryIndexComponent,
     QuestionCategoryFormComponent,
     AssigmentReportComponent,
-    ExamFormComponent,
     ExamIndexComponent,
-    CorrectBlanAnswerComponent,
-    AssignStudentToExamComponent,
+    MyExamIndexComponent,
+    ExamRoomComponent,
+    QuestionComponent,
   ],
   imports: [
     BrowserModule,

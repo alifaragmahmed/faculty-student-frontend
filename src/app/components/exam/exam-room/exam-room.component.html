@@ -1,0 +1,127 @@
+<app-breadcrumb [breadcrumbList]="breadcrumbData"  ></app-breadcrumb>
+<br>
+
+<div class="row">
+
+  <div class="col-lg-3 col-md-3 col-sm-12" style="padding-right: 30px" >
+    <div class="material-shadow w3-white w3-round" style="padding-top: 10px;" >
+      <div class="timer-holder" >
+        <br>
+        <div class="w3-center w3-xxlarge ">
+          {{ resource.exam? resource.exam.minutes : 0 }} : {{ minutes }}
+          <br>
+          {{ seconds }}
+        </div>
+      </div>
+      <div class="w3-center w3-padding ">
+        <b>{{ "questions_map" | trans }}</b>
+      </div>
+      <br>
+      <ul class="timeline timeline-inverse">
+
+        <!-- timeline item -->
+        <li *ngFor="let item of resource.questions index as i " >
+          <i *ngIf="selectedStep != i" class="fa fa- {{ item.answer? 'w3-green' : 'w3-light-gray' }}">{{ i+1 }}</i>
+          <i *ngIf="selectedStep == i" class="fa fa- w3-indigo">{{ i+1 }}</i>
+
+          <div class="timeline-item" style="border-radius: 5em!important;" >
+            <span class="time" *ngIf="item.is_breadpoint" >
+              <i class="fa fa-circle w3-text-green"></i>
+            </span>
+
+            <div
+            class="timeline-body w3-tiny"
+            (click)="goto(i)"
+            data-toggle="tooltip" data-placement="top" [title]="item.question? item.question.text : ''"
+            style="cursor: pointer;border-radius: 5em!important;padding: 5px!important;background-color: transparent!important;" >
+              <a  class="{{ selectedStep == i? 'w3-text-indigo' : 'w3-text-gray' }}">{{ item.question? helper.getOverText(item.question.text, 50)  : '' }}</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <br>
+    </div>
+
+  </div>
+
+  <div class="col-lg-9 col-md-9 col-sm-12">
+    <div class="material-shadow w3-white w3-round" style="padding: 5px;" >
+      <table class="w3-table w3-padding" style="border: 2px dashed lightgray" >
+        <tr>
+          <td class="text-right w3-padding"  style="text-align: right!important;" >
+            <img src="/assets/img/logo.png" width="50px" >
+            <br>
+            <b>fjdskf dsjkl </b>
+          </td>
+          <td class="text-left w3-padding" >
+            <table class="text-right">
+              <tr>
+                <td>{{ "level" | trans }}</td>
+                <td>{{ "" }}</td>
+              </tr>
+              <tr>
+                <td>{{ "department" | trans }}</td>
+                <td>{{ "" }}</td>
+              </tr>
+              <tr>
+                <td>{{ "course" | trans }}</td>
+                <td>{{ resource.course? resource.course.name : '' }}</td>
+              </tr>
+              <tr>
+                <td>{{ "time" | trans }}</td>
+                <td>{{ resource.minutes }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="text-center w3-large w3-center" >
+            <b class="w3-center" >
+              {{ resource.exam? resource.exam.name : '' }}
+            </b>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <div  class="text-center" >
+        <b>
+          {{ resource.exam? resource.exam.header_text : '' }}
+        </b>
+      </div>
+      <br>
+      <div
+      *ngFor="let item of resource.questions index as i "
+      style="border: 2px dashed lightgray;padding: 5px;margin-bottom: 10px"
+      class="question {{ 'question-'+i }}"
+      [style.display]="i == 0? '' : 'none'"  >
+        <app-question [resource]="item.question" [number]="i + 1" [item]="item" ></app-question>
+        <br>
+        <div class="w3-center">
+          <button mat-raised-button
+          *ngIf="i < this.resource.questions.length - 1"
+          color="primary" style="margin: 4px"
+          (click)="goto(i+1)" >{{ "next" | trans }}</button>
+
+          <button mat-raised-button
+          *ngIf="i != 0"
+          style="margin: 4px"
+          (click)="goto(i-1)" >{{ "back" | trans }}</button>
+        </div>
+      </div>
+      <br>
+
+      <div  class="text-center" >
+        <b>
+          {{ resource.exam? resource.exam.footer_text : '' }}
+        </b>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+
+</div>
+

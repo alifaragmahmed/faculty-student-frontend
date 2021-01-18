@@ -12,9 +12,7 @@ import { AssigmentIndexComponent } from './components/assigment-index/assigment-
 import { QuestionIndexComponent } from './components/question/question-index/question-index.component';
 import { QuestionCategoryIndexComponent } from './components/question-category/question-category-index/question-category-index.component';
 import { ExamIndexComponent } from './components/exam/exam-index/exam-index.component';
-import { ExamFormComponent } from './components/exam/exam-form/exam-form.component';
-import { CorrectBlanAnswerComponent } from './components/exam/correct-blan-answer/correct-blan-answer.component';
-import { AssignStudentToExamComponent } from './components/exam/assign-student-to-exam/assign-student-to-exam.component';
+import { ExamRoomComponent } from './components/exam/exam-room/exam-room.component';
 
 const routes: Routes = [
 
@@ -52,28 +50,16 @@ const routes: Routes = [
         component: ExamIndexComponent
       },
       {
-        path: 'create-exam',
-        component: ExamFormComponent
-      },
-      {
-        path: 'edit-exam',
-        component: ExamFormComponent
-      },
-      {
-        path: 'correct-blank',
-        component: CorrectBlanAnswerComponent
-      },
-      {
-        path: 'assign-exam',
-        component: AssignStudentToExamComponent
-      },
-      {
         path: 'main',
         component: MainPageComponent
       },
       {
         path: 'profile',
         component: UserProfileComponent
+      },
+      {
+        path: 'exam-room',
+        component: ExamRoomComponent
       },
      /* {
         path: 'dashboard',
