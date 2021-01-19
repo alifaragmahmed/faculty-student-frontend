@@ -10,9 +10,12 @@ export class Helper {
    * @param router
    * @param url
    */
-  public static refreshComponent(router: Router, url) {
+  public static refreshComponent(router: Router, url, id=null) {
     router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      router.navigate([url]);
+      if (!id)
+        router.navigate([url]);
+      else
+        router.navigate([url, id]);
     });
     setTimeout(() => {
       let doc: any = document;

@@ -15,6 +15,6 @@ export class SystemSettingService {
   }
 
   getNotifications() {
-    return this.http.get('doctor/notifications?api_token='+Auth.getApiToken());
+    return this.http.get('notifications?api_token='+Auth.getApiToken());
   }
 }

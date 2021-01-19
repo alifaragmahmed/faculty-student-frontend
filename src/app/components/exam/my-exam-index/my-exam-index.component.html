@@ -28,7 +28,7 @@
         <i class="fa fa-refresh fa-spin w3-left" style="padding-top: 10px;" *ngIf="reload" ></i>
       </button>
 
-      <button mat-raised-button  class="w3-block w3-indigo w3-row app-button" routerLink="/create-exam" >
+      <button mat-raised-button  class="w3-block w3-indigo w3-row app-button hidden" routerLink="/create-exam" >
         <b class="w3-right" >{{ "add exam" | trans }}</b>
         <i class="fa fa-plus-circle w3-left" style="padding-top: 10px;"   ></i>
       </button>
@@ -61,17 +61,17 @@
           </td>
         </tr>
           <ng-container  *ngFor="let item of exams index as i">
-            <tr *ngIf="!reload" class="w3-hover-light-gray" style="cursor: pointer;" (click)="$('.exam-setting-'+item.id).modal('show')" >
-              <td>{{ item.name }}</td>
+            <tr *ngIf="!reload" class="w3-hover-light-gray" style="cursor: pointer;" _click="$('.exam-setting-'+item.id).modal('show')" >
+              <td>{{ item.exam? item.exam.name : '' }}</td>
               <td>{{ item.course? item.course.name : '' }}</td>
               <td>{{ item.doctor? item.doctor.name : '' | trans }}</td>
               <td>{{ item.start_time }}</td>
               <td>{{ item.end_time }}</td>
-              <td>{{ item.minutes }}</td>
-              <td>{{ item.question_number }}</td>
-              <td>{{ item.total }}</td>
+              <td>{{ item.exam? item.exam.minutes : '' }}</td>
+              <td>{{ item.exam? item.exam.question_number : '' }}</td>
+              <td>{{ item.exam? item.exam.total : '' }}</td>
               <td>
-                0
+                {{ item.grade }}
               </td>
               <!--<td style="padding: 0px!important"  >
 
@@ -115,7 +115,7 @@
                     <button mat-raised-button
                     *ngIf="item.can_delete"
                     class="w3-block w3-red w3-row app-button"
-                    (click)="archive(item)" >
+                    >
                       <b class="w3-right" >{{ "remove exam" | trans }}</b>
                       <i class="fa fa-trash w3-left" style="padding-top: 10px;"   ></i>
                     </button>

@@ -129,23 +129,6 @@ export class MyExamIndexComponent implements OnInit {
     this.$('#examEditModal').modal('show');
   }
 
-  /**
-   * show export exams from excel file
-   *
-   */
-  archive(item, index) {
-    let _this = this;
-    Message.confirm(Helper.trans("are you sure"), ()=>{
-      _this.globalService.destroy("student/exams/delete", item.id).subscribe((r: any)=>{
-        if (r.status == 1) {
-          Message.success(r.message);
-          this.get();
-        }
-        else
-          Message.error(r.message);
-      });
-    });
-  }
 
 
   /**

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Auth } from 'src/app/shared/auth';
 import { Helper } from 'src/app/shared/helper';
 import { Message } from 'src/app/shared/message';
@@ -73,7 +74,9 @@ export class ExamIndexComponent implements OnInit {
    */
   public reload = false;
 
-  constructor(private globalService: GlobalService, private sanitizer: DomSanitizer) {
+  constructor(private router: Router,
+    private globalService: GlobalService,
+    private sanitizer: DomSanitizer) {
     this.action = () => { this.get(); };
   }
 
@@ -111,7 +114,7 @@ export class ExamIndexComponent implements OnInit {
   start(item) {
     let _this = this;
     Message.confirm(Helper.trans("are you sure"), ()=>{
-
+      Helper.refreshComponent(this.router, "/exam-room", item.id);
     });
   }
 

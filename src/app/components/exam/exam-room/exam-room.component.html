@@ -49,29 +49,15 @@
       <table class="w3-table w3-padding" style="border: 2px dashed lightgray" >
         <tr>
           <td class="text-right w3-padding"  style="text-align: right!important;" >
-            <img src="/assets/img/logo.png" width="50px" >
+            <img src="{{ user.faculty? user.faculty.logo_url : '' }}" width="50px" >
             <br>
-            <b>fjdskf dsjkl </b>
+            <b>{{ user.faculty? user.faculty.name : '' }}</b>
           </td>
-          <td class="text-left w3-padding" >
-            <table class="text-right">
-              <tr>
-                <td>{{ "level" | trans }}</td>
-                <td>{{ "" }}</td>
-              </tr>
-              <tr>
-                <td>{{ "department" | trans }}</td>
-                <td>{{ "" }}</td>
-              </tr>
-              <tr>
-                <td>{{ "course" | trans }}</td>
-                <td>{{ resource.course? resource.course.name : '' }}</td>
-              </tr>
-              <tr>
-                <td>{{ "time" | trans }}</td>
-                <td>{{ resource.minutes }}</td>
-              </tr>
-            </table>
+          <td class="text-right w3-padding" style="text-align: right!important;width: 50%" >
+            <b>{{ "level" | trans }}</b> : {{ resource.level? resource.level.name : '' }} <br>
+            <b>{{ "department" | trans }}</b> : {{ resource.department? resource.department.name : '' }} <br>
+            <b>{{ "course" | trans }}</b> : {{ resource.course? resource.course.name : '' }} <br>
+            <b>{{ "time" | trans }}</b> : {{ resource.exam? resource.exam.minutes : 0 }} <br>
           </td>
         </tr>
         <tr>
@@ -114,7 +100,13 @@
         <b>
           {{ resource.exam? resource.exam.footer_text : '' }}
         </b>
+        <br>
+        <button mat-raised-button color="primary" (click)="send()" >
+          {{ "send" | trans }}
+        </button>
       </div>
+
+
 
 
     </div>

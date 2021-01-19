@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { setTime } from 'ngx-bootstrap/chronos/utils/date-setters';
+import { Observable, observable, timer } from 'rxjs';
 import { Auth } from 'src/app/shared/auth';
 import { Helper } from 'src/app/shared/helper';
 import { Message } from 'src/app/shared/message';
@@ -25,6 +27,12 @@ export class ExamRoomComponent implements OnInit {
    *
    */
   public document: any = document;
+
+  /**
+   * init document
+   *
+   */
+  public user: any = Auth.user();
 
   /**
    * Array of items of breadcrumb
@@ -52,10 +60,23 @@ export class ExamRoomComponent implements OnInit {
   minutes = 0;
   totalMinutes = 0;
   interval = null;
+  time: any = timer(1000, 1000);
+  subscribe: any;
 
-  constructor(private globalService: GlobalService, private sanitizer: DomSanitizer) {
+  constructor(private globalService: GlobalService,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private route: ActivatedRoute) {
 
+    if (this.route.snapshot.paramMap.has('id')) {
+      this.get(this.route.snapshot.paramMap.get('id'));
+    }
   }
+
+  /*test():Observable<any> {
+    console.log('timer is run');
+    //return new Observable(1);
+  }*/
 
   /**
    * init items of breadcrumb
@@ -75,21 +96,65 @@ export class ExamRoomComponent implements OnInit {
   get(id=null) {
     this.reload = true;
     this.globalService.get("student/exam-room/"+id, {}).subscribe((res: any) => {
-      this.resource = res.data;
-      this.reload = false;
-      this.minutes = this.resource.remaining_minutes;
-      this.totalMinutes = this.resource.exam? this.resource.exam.minutes : 0;
-      this.initBreadcrumbData();
-      this.initTimer();
-      //
-      setTimeout(() => {
-        this.$('[data-toggle="tooltip"]').tooltip();
-      }, 1000);
+      if (res.status == 1) {
+        this.resource = res.data;
+        this.reload = false;
+        this.minutes = this.resource.remaining_minutes;
+        this.totalMinutes = this.resource.exam? this.resource.exam.minutes : 0;
+        this.initBreadcrumbData();
+        this.initTimer();
+        //
+        setTimeout(() => {
+          this.$('[data-toggle="tooltip"]').tooltip();
+        }, 1000);
+      } else {
+        Message.error(res.message);
+      }
     });
   }
 
+  /**
+   * build resource object will be sent to backend
+   *
+   */
   getExam() {
+    let resource = {
+      student_exam_id: this.resource.id,
+      exam_id: this.resource.exam.id,
+      questions: []
+    };
 
+    this.resource.questions.forEach(element => {
+      let item = {
+        student_detail_id: element.id,
+        question_id: element.question.id,
+        answer: element.answer
+      };
+      resource.questions.push(item);
+    });
+
+    return resource;
+  }
+
+  send() {
+    var self = this;
+    Message.confirm(Helper.trans('are you sure'), () => {
+      self.store();
+    });
+  }
+
+  store() {
+    let data = this.getExam();
+    Helper.loader(true);
+    this.globalService.store('student/exam-room/store', data).subscribe((res: any) => {
+      if (res.status == 1) {
+        Message.success(res.message);
+      } else{
+        Message.error(res.message);
+      }
+      Helper.loader(false);
+      Helper.refreshComponent(this.router, '/exams');
+    });
   }
 
   goto(step) {
@@ -99,7 +164,8 @@ export class ExamRoomComponent implements OnInit {
   }
 
   initTimer() {
-    this.interval= setInterval(() => {
+    this.subscribe = this.time.subscribe((value) => {
+      console.log(value);
       if (this.seconds < 59) {
         this.seconds ++;
       } else {
@@ -109,14 +175,16 @@ export class ExamRoomComponent implements OnInit {
           this.endExam();
         }
       }
-    }, 1000);
+    });
   }
 
   /**
    *
    */
   endExam() {
-    Message.success('done');
+    Message.success(Helper.trans('time is out'));
+    this.subscribe.unsubscribe();
+    this.store();
   }
 
 
@@ -140,7 +208,6 @@ export class ExamRoomComponent implements OnInit {
    * load faculties
    */
   loadSettings() {
-    this.get(5);
     //
 
   }

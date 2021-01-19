@@ -13,6 +13,7 @@ import { QuestionIndexComponent } from './components/question/question-index/que
 import { QuestionCategoryIndexComponent } from './components/question-category/question-category-index/question-category-index.component';
 import { ExamIndexComponent } from './components/exam/exam-index/exam-index.component';
 import { ExamRoomComponent } from './components/exam/exam-room/exam-room.component';
+import { MyExamIndexComponent } from './components/exam/my-exam-index/my-exam-index.component';
 
 const routes: Routes = [
 
@@ -58,8 +59,12 @@ const routes: Routes = [
         component: UserProfileComponent
       },
       {
-        path: 'exam-room',
+        path: 'exam-room/:id',
         component: ExamRoomComponent
+      },
+      {
+        path: 'my-exams',
+        component: MyExamIndexComponent
       },
      /* {
         path: 'dashboard',
